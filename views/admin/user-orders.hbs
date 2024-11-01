@@ -1,0 +1,132 @@
+<style>
+.user-d{
+    display: flex;
+justify-content: center;
+}
+.box-56{
+    display: flex;
+    text-align: center;
+    border-radius: 8px;
+    flex-direction: column;
+    gap: 20px;
+    width: 1200px;
+    background-color: #efefef;
+    padding: 10px;
+    .box2{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        
+    }
+}.section1{
+    border-radius: 8px;
+     display: flex;
+     padding: 60px ;
+     text-align: left;
+    flex-direction: column;
+    width: 40%;
+    border: 1px solid rgb(210, 210, 210);
+    p{
+        margin-left: 10px;
+    }
+}
+.section2::-webkit-scrollbar {
+    width: 10px;
+}
+.section2{
+    
+    border-radius: 8px;
+    padding: 30px;
+    align-items: center;
+    height: 800px;
+    overflow-y: scroll;
+    width: 60%;
+}
+.items{
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    
+    img{
+        border-radius: 8px;
+        height: 140px;
+        width: auto;
+    }
+    
+}
+.in-items{
+    padding: 6px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 80px;
+    margin: 30px 0;
+    border: 1px solid rgb(210, 210, 210);
+    div{
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+
+    }
+}
+
+</style>
+
+<section>
+    <div class="the-container">
+        <div class="user-d">
+            
+            <div class="box-56">
+                <h3>Order Id <code>'{{#each data}}{{this._id}}{{/each}}'</code> details</h3>
+                {{#if data}}
+                {{#each data}}
+                <div class="box2">
+                    <div class="section1 shadow-hover">
+                        <h2>User Details</h2>
+                        <p>Name : {{this.userData.name}}</p>
+                        <p>Email : {{this.userData.email}}</p>
+                        <details style="margin-bottom: 20px;">
+                            <p>User Id: <code>{{this.userData._id}}</code></p>
+                        </details>
+                        <h4>Delivery Details</h4>
+                        <p>Mobile : {{this.deliveryDetails.mobile}}</p>
+                        <p>Address : {{this.deliveryDetails.address}}</p>
+                        <p>PinCode : {{this.deliveryDetails.pincode}}</p>
+                        <h4>Payment Details</h4>
+                        <p>Ordered Date : {{this.date}}</p>
+                        <p>payment Method : {{this.paymentMethod}}</p>
+                        <p>Total Amount : {{this.totalAmount}}</p>
+                        <p>Status : {{this.status}}</p>
+
+                        <a style="margin-top: 80px;" href="/admin/all-orders">Back</a>
+                    </div>
+                    <div class="section2 shadow-hover">
+                        <div class="items">
+                            {{#each products}}
+                            
+                            <div class="in-items shadow-hover">
+                                <div>
+                                <h2>Item {{@key}}</h2>
+                                <p>Name : {{this.details.name}}</p>
+                                <p>Category : {{this.details.category}}</p>
+                                <p>Price : {{this.details.price}}</p>
+                                <p>Quantity : {{this.quantity}}</p>
+                                
+                                </div>
+                                <img src="/product-images/{{this.details._id}}.jpg" alt="Image">
+                            </div>
+                            {{/each}}
+                            
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                {{else}}
+                no data was found for the specific id 
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>

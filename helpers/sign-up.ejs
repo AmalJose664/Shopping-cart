@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+
+            color: #333;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            place-content: center;
+            padding: 30px;
+
+        }
+
+        .container {
+            background-color: rgb(234, 234, 234);
+            padding-bottom: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 650px;
+            margin: 20px auto;
+        }
+
+        .nav {
+
+            height: 70px;
+            background: linear-gradient(to right, #030303, #0059ff);
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            padding-top: 18px;
+            align-items: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+
+        }
+
+        .box {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 40px;
+            padding-top: 30px;
+            min-height: 300px;
+
+
+
+            line-height: 25px;
+        }
+
+        .start {
+            width: 1fr
+        }
+
+        .end {
+            width: 1fr
+        }
+
+        .center {
+            width: 43%;
+            font-size: 35px;
+            font-weight: 600;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 0 12px #7e7e7e;
+        }
+
+        footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        footer a {
+            text-decoration: none;
+        }
+
+        .pads {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .pad {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="nav">
+
+            <div class="start">
+                <img src="cid:unique@logo.cid" alt=" hello"
+                    style="margin-left: 15px; margin-right: 20px; width: 50px; height: auto; border-radius: 20px;">
+            </div>
+            <div class="center">
+                Shopping Cart
+            </div>
+            <div class="end">
+
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-in">
+                <h3 class="pad">Welcome to Our Service!</h3>
+                <h4 class="pads">Hello <%= userData.name %>,</h4>
+                <p>
+                    Thank you for creating an account with us! We're excited to have you join our community.
+                    At Shopping Cart, we strive to provide you with the best experience possible.
+                    Whether you're here to explore, shop, or learn, we're here to support you every step of the way.
+                </p><br>
+                <P>Here are your login crediantials </P>
+                <p>Username: <%= userData.name %></p>
+                <p>Email: <a href=""><%= userData.email %></a></p>
+
+                <br>
+                <p>
+                    If you have any questions or need assistance, don't hesitate to reach out to our support team at
+                    <a href="">renderstest446446@gmail.com</a>. We're always here to help.
+                </p>
+                <p class="pads">
+                    Happy exploring!
+                </p><br>
+                <p>
+                    Best regards,<br>
+                    The Shopping cart Team
+                </p>
+            </div>
+
+        </div>
+        <footer>
+
+            <p>
+                &copy; 2024 Shopping Cart. All rights reserved.<br>
+                Visit our website: <a style="text-decoration: underline;" href="http://localhost:3000">Shopping Cart</a>
+            </p>
+        </footer>
+    </div>
+
+</body>
+
+</html>

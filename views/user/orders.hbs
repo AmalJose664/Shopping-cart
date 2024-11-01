@@ -1,0 +1,212 @@
+
+<style>
+    .container{
+       max-width: 1266px;
+    }
+    
+    .search-inputs{
+        margin-bottom: -20px;
+        input{
+            display: inline-block;
+            margin: 8px 3px;
+            height: 37px;
+             width: 68%;
+             padding: 7px;
+        }select{
+             display: inline-block;
+             width: 29%;
+             margin: 8px 0;
+             height: 37px;
+             padding: 7px;
+        }
+    }th{
+        cursor: pointer;
+         transition: 200ms ease;
+    }th:hover{
+        background-color: rgb(21, 92, 216);
+        transition: 200ms ease;
+        border-radius: 8px;
+    }
+    th:last-child{
+        cursor: default;
+    }.symbol-t{
+        visibility: hidden;
+        color: aliceblue;
+        float: right;
+        font-size: 17px;
+        transition: 200ms ease-in;
+    }
+    .symbol-t.show{
+        visibility: visible;
+        transition: 200ms ease-in;
+    }
+    .symbol-t.invert{
+        transform: rotate(180deg);
+        transition: 200ms ease-in;
+        
+
+    }
+</style>
+<section>
+    <div class="container ">
+        
+        <p class="text-center warn" style="font-size: 30px;"></p>
+        <div class="search-inputs">
+            <input onkeyup="searchTable()" id="order-table-input" type="text" class="form-control" 
+                 placeholder="Search the table">
+            <select onchange="clearInput()" name="" id="searchField" class="form-control">
+                <option class="options-9" value="1">Search by Date (YYYY-MM-DD)</option>
+                <option class="options-9" value="2">Address </option>
+                <option class="options-9" value="3">Pincode </option>
+                <option class="options-9" value="4">Mobile </option>
+                <option class="options-9" value="5">Amount </option>
+                <option class="options-9" value="6">Payment </option>
+                <option class="options-9" value="7">Status </option>
+                
+            </select>
+        </div>
+        <table  class="table mt-5 table-striped table-light ordertable" style="border-radius: 8px;" >
+            
+            <thead  style="position: sticky !important; top: 0px !important ;background: rgb(40, 108, 255) !important; border-radius: 8px !important; ">
+                
+                <tr class="tr-thead" style="border-radius: 8px;">
+                    <th onclick="sortTable(0)" style="border: none; border-top-left-radius: 8px; border-bottom-left-radius:8px ;" scope="col">SI.No <span class="symbol-t">&#9662</span></th>
+                    <th onclick="sortTable(1)" style="border: none;" scope="col">Date <span class="symbol-t">&#9662</span></th>
+                    <th  onclick="sortTable(2)" style="border: none;" scope="col">Address <span class="symbol-t">&#9662</span></th>
+                    <th onclick="sortTable(3)" style="border: none;" scope="col">Pincode <span class="symbol-t">&#9662</span></th>
+                    <th onclick="sortTable(4)" style="border: none;" scope="col">Mobile <span class="symbol-t">&#9662</span></th>
+                    <th onclick="sortTable(5)" style="border: none;" scope="col">Amount <span class="symbol-t">&#9662</span></th>
+                    <th onclick="sortTable(6)" style="border: none;" scope="col">Payment <span class="symbol-t">&#9662</span></th>
+                    <th onclick="sortTable(7)" style="border: none;" scope="col">Status <span class="symbol-t">&#9662</span></th>
+                    <th  style="border: none; border-top-right-radius: 8px; border-bottom-right-radius:8px " scope="col">Link</th>
+                    
+                    
+                </tr>
+            </thead>
+            <tbody >
+                {{#each orders}}
+                <tr class="light-hover table-present"> 
+                    <td scope="row">{{@key}}</td>
+                    
+                    <td>{{this.date}}</td>
+                    <td>{{this.deliveryDetails.address}}</td>
+                    <td>{{this.deliveryDetails.pincode}}</td>
+                    <td>{{this.deliveryDetails.mobile}}</td>
+                    <td>{{this.totalAmount}}</td>
+                    <td>{{this.paymentMethod}}</td>
+                    <td>{{this.status}}</td>
+                    <td><a class="btn btn-primary" href="/view-order-products/{{this._id}}"> View</a></td>
+                    
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        
+    </div>
+</section>
+<script>
+    
+    let tableBody = document.querySelectorAll('.table-present')
+    let table = document.querySelector('.ordertable')
+    let indicate = table.getElementsByTagName('span')
+    let input = document.getElementById('order-table-input');
+    let searchField = document.getElementById('searchField')
+    let tr = table.getElementsByTagName('tr')
+    if(!tableBody.length){
+        table.remove()
+        document.querySelector('.warn').textContent='You have not Purchased anything yet!!'
+    }
+
+    function clearInput() {
+            
+            input.value = ""
+
+            searchTable();
+        }
+    function searchTable() {
+            
+            let filter = input.value.toUpperCase();
+
+            
+            
+            let td
+           
+
+            for (i = 0; i < (tr.length); i++) {
+
+
+                td = tr[i].getElementsByTagName("td")[parseInt(searchField.value)];
+                
+                if (td) {
+                    let trText = td.textContent || td.innerHTML;
+                   
+                   if (parseInt(searchField.value) == "1") {
+                        let date = new Date(trText)
+                        trText = date.toISOString().split("T")[0]
+
+                    }
+                    //console.log(trText.toUpperCase().indexOf(filter))
+                    if (trText.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = ""
+                    } else {
+                        tr[i].style.display = "none"
+                    }
+                }
+
+            }
+        }
+
+
+        let t = -1;
+        function sortTable(n) {
+                
+                if (t == -1) {
+                    t = n;
+                    indicate[n].classList.add('show')
+                } else if (t == n) {
+                    indicate[n].classList.toggle('invert')
+                } else if (t != n) {
+                    indicate[n].classList.add('show')
+                    indicate[t].classList.remove('invert')
+                    indicate[t].classList.remove('show')
+                    t = n;
+                }
+                const rowsArray = Array.from(table.rows).slice(1); // Convert table rows to array (skip header)
+                let dir = table.getAttribute("data-sort-dir") || "asc"; // Store the current sort direction
+
+                // Detect if column data is numeric, dates, or strings
+                const isNumeric = !isNaN(parseFloat(rowsArray[0].cells[n].innerText));
+                const isDate = Date.parse(rowsArray[0].cells[n].innerText);
+
+                // Compare function for sorting
+                const compare = (a, b) => {
+                    let valA = a.cells[n].innerText.toLowerCase();
+                    let valB = b.cells[n].innerText.toLowerCase();
+
+                    // Parse data types
+                    if (isNumeric) {
+                        valA = parseFloat(valA);
+                        valB = parseFloat(valB);
+                    } else if (isDate) {
+                        valA = new Date(valA);
+                        valB = new Date(valB);
+                    }
+
+                    if (dir === "asc") {
+                        return valA > valB ? 1 : -1;
+                    } else {
+                        return valA < valB ? 1 : -1;
+                    }
+                };
+
+                // Sort rows based on comparison function
+                rowsArray.sort(compare);
+
+                // Append rows back to table in sorted order
+                rowsArray.forEach(row => table.appendChild(row));
+
+                // Toggle sorting direction
+                dir = (dir === "asc") ? "desc" : "asc";
+                table.setAttribute("data-sort-dir", dir);
+            }
+</script>

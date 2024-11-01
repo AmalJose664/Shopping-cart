@@ -1,0 +1,36 @@
+<section>
+    <div class="row">
+        <div class="col-md-6 m-auto">
+            <div class="container mt-5 pl-5">
+                <h2 class="text-center">Create a New Account</h2>
+                <form action="/signup" method="post">
+                    {{#if exist}}
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input required type="email" name="email" placeholder="Enter email" class="form-control"
+                            value="{{email}}">
+    
+                    </div>
+                    <p style="color: rgb(255, 46, 46);">Email Already Taken by another user</p>
+                    {{else}}
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input required type="email" name="email" placeholder="Enter email" class="form-control">
+                    </div>
+                    {{/if}}
+    
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input required type="text" name="name" placeholder="Enter Name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input required type="password" name="password" placeholder="Enter passowrd" class="form-control">
+                    </div>
+                    <a href="/login">Login to existing Account</a>
+                    <button type="submit" class="btn btn-primary float-right pl-4 pr-4">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

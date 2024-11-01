@@ -1,0 +1,137 @@
+<section>
+    <div class="container">
+        <h3 class="text-center">{{user.name}}'s Cart</h3>
+        {{#if products}}
+        <table class="mt-5 table">
+            
+            <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Tilte</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th></th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                
+                <tr class="hover-row">
+                   
+                    <td> <img id="thefuck" style="width: 120px; height: auto;" src="product-images/{{this.product._id}}.jpg" alt=""></td>
+                    <td id="product-name">{{this.product.name}}</td>
+                    <td>Rs {{this.product.price}}/~</td>
+                    
+                    <td><button  style="background-color: cadetblue;" class="cart-items-count mr-3 mt-4 btn btn-primary" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{this.product.name}}','{{../user._id}}',-1)">-</button>
+                    <span class="" id="{{this.product._id}}">{{this.quantity}}</span>
+                    <button  style="background-color: cadetblue;" class="mt-4 btn btn-primary cart-items-count ml-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{this.product.name}}','{{../user._id}}',1)">+</button>
+                    </td>
+                    <td> <button onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{this.product.name}}','{{../user._id}}',0)" href="#" class="btn btn-danger">Remove</button> </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        
+
+        
+        <hr>
+        
+        <div class="float-right pr-5">
+            <div style="padding-top: 20px;">
+                <hr>
+                <div style="font-size: 18px; line-height: 9px; border: 1px solid rgb(19, 138, 217); border-radius: 8px; padding: 10px;" class="text-center calc">
+                    {{#each products}}
+                    <p style="margin: 12px 0;"><span id = "count{{this.product._id}}">{{this.quantity}}</span> x {{this.product.price}}</p>
+                    {{/each}}
+                   
+                </div>
+                <hr>
+                <h5 class="float-right mr-5">Total: Rs: <span id="total">{{total}}</span>/~</h5>
+               
+            </div>
+            
+            <a href="/" class=" btn btn-primary mt-3 orderbtn" style="width: 50%; ;">Buy More Items</a><a href="/place-order" class=" btn btn-success mt-3 orderbtn" style="margin-left: 20px;width: 40%;">Place Order</a>
+        </div>
+        {{else}}
+        <div class="p-5">
+            <h4 class="text-center" style="color: rgb(89, 108, 150);">Cart's Empty</h4>
+            <a href="/" class=" shadow-hover btn btn-primary mt-3  orderbtn " style="width: 50%;margin-left: 25%;">Add Products</a>
+        </div>
+        {{/if}}
+    </div>
+</section>
+
+<script >
+    
+    
+    let total=document.querySelector('#total')
+    let orderbtn = document.querySelector('.orderbtn')
+    if(total.innerHTML==='0'){
+        
+        total.parentElement.remove()
+        orderbtn.textContent="Buy Something"
+        orderbtn.href="/"
+    }
+    
+    async function changeQuantity(cartId,proId,name,userId,count){
+        
+        let prodQuantity = document.getElementById(proId).textContent
+        console.log(prodQuantity)
+        //checking product quantity greater than 5 or not to increase its quantity
+        if(parseInt(prodQuantity)>4 && count == 1){
+            await openPopup("Cart error", "Cannot buy a product with more than 5 quantity", 'red')
+        }else{
+            let quantity = parseInt(document.getElementById(proId).innerHTML)
+            //console.log(typeof count, count, '<=count quantity=>' + quantity)
+            count = parseInt(count)
+            //console.log(typeof count,count,'<=count quantity=>'+quantity)
+
+           if(count==0){
+             await customConfirm("Are you sure to remove '" + name + "' from cart").then((result) => {
+                   if (  result) {
+                       count = -1
+                       quantity = 1
+                   }
+               })
+           }
+            
+
+
+            $.ajax({
+                url: '/change-product-quantity',
+                data: {
+                    user: userId,
+                    cart: cartId,
+                    product: proId,
+                    count: count,
+                    quantity: quantity
+                },
+                method: 'post',
+                success: (response) => {
+                    if (response.removeProduct) {
+                        
+                        openPopup("Removed", `Item '${name}'was removed from cart`, 'red', () => {
+                            location.reload()
+                        })
+
+                    } else {
+
+                        //console.log(response)
+                        document.getElementById(proId).innerHTML = quantity + count
+                        document.getElementById("count" + proId).innerHTML = quantity + count
+                        document.getElementById('total').innerHTML = response.total
+
+                    }
+                }
+            })
+        }
+         
+            
+        
+        
+        
+        
+    }
+</script>

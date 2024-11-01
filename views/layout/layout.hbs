@@ -1,0 +1,80 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/stylesheets/boot.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/style.css" crossorigin="anonymous">
+
+    <link rel="icon" type="image/png" href="/images/ico.jpg">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+
+    <script defer src="/javascripts/jquery.js" crossorigin="anonymous"></script>
+
+    <script defer src="/javascripts/popper.js" crossorigin="anonymous"></script>
+    <script defer src="/javascripts/bootstrap.js" crossorigin="anonymous"></script>
+    <script defer src="/javascripts/checkout.js" crossorigin="anonymous"></script>
+    <script defer src="/javascripts/ajax.js" crossorigin="anonymous"></script>
+    <script defer src="/javascripts/lotie.js" crossorigin="anonymous"></script>
+    <script defer src="/javascripts/script.js" crossorigin="anonymous"></script>
+
+
+    <title>Shopping cart</title>
+</head>
+
+<body>
+    {{!-- popup structure --}}
+    <div  class="popup ">
+    
+        <div class="popup-content">
+            <span class="closebtn">&times;</span>
+            <h2 class="h4tyu"></h2>
+            <p class="messagert6"></p>
+            
+            <span class="okbtn">OK</span>
+        </div>
+    </div>
+    <div class="confirm ">
+    
+        <div class="confirm-content">
+            <span class="confirm-closebtn">&times;</span>
+            <div>
+                <p class="mesaa221">
+                </p>
+            </div>
+            <span class="confirm-cancelbtn">Cancel</span>
+
+            <span class="confirm-okbtn">OK</span>
+        </div>
+    </div>
+
+
+    {{#if user.isAdmin}}
+    {{>admin-header}}
+    {{else}}
+    {{>user-header}}
+
+    {{/if}}
+    {{{body}}}
+    
+    
+    {{#if err}}
+    
+    {{else}}
+    {{>footer}}
+    {{/if}}
+    
+</body>
+
+</html>
+
+

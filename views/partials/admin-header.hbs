@@ -1,0 +1,64 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+       
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="/"><img src="/images/ico.jpg" alt="Image" style="height: 35px; width: auto;
+                    border-radius: 10px;
+                    "></a>
+                </li>
+                
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="/">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/admin">All Products <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/all-orders">All Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/users">All Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/order"> My Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-outline-priamry cartbox" style="border-radius: 9px; border: solid 1px rgb(25, 80, 181)  ;"
+                        href="/cart">Cart<span id="cart-count" class="badge ml-1 badge-primary">{{cartCount}}</span></a>
+                </li>
+                
+                {{#if user.isAdmin}}
+                <li class="nav-item">
+                    <p class="nav-link" style="font-size: 20px; margin-bottom: 0;margin-left: 50px;">Logged in as Admin</p>
+                </li>
+                {{/if}}
+            </ul>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle mr-8" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    {{#if user}}
+                    {{user.name2}}
+                    {{else}}
+                    Account
+                    {{/if}}
+            
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {{#if user}}
+                    <a class="dropdown-item " href="/logout">Log out</a>
+                    {{else}}
+                    <a class="dropdown-item " href="/login">Login</a>
+                    <a class="dropdown-item " href="/signup">Signup</a>
+                    {{/if}}
+            
+                </div>
+        </div>
+    </nav>
+</header>

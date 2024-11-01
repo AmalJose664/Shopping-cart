@@ -1,0 +1,100 @@
+<style>
+.shower1{
+    opacity: 0;
+    visibility: hidden;
+    transition: 400ms ease,opacity 200ms ease-in-out 0ms;
+}
+.shower2{
+    transform: translate(-50px ,-70px) scale(1.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: 300ms ease,
+                opacity 200ms ease-in-out 0ms,
+                transform 200ms ease-in-out 0ms;
+}
+.shower1.visible{
+    visibility: visible;
+    opacity: 100%;
+    transition: 400ms ease,opacity 200ms ease-in-out 0ms;
+}
+.shower2.visible{
+    transform: translate(-50px ,-50px) scale(1);
+    visibility: visible;
+    opacity: 100%;
+    transition: 400ms ease,
+                opacity 200ms ease-in-out 0ms,
+                transform 200ms ease-in-out 0ms;
+}
+</style>
+<section id="">
+    
+    <div class="shower1">
+        <div class="alert alert-success alert-dismissible fade show  " role="alert">
+            <strong>Hooray!!!!</strong> Your order was a total Success
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <div class="shower2" style="margin-top: 70px; position: relative;z-index: 5;top:70px;left:2%">
+        <div class="row ">
+            <div class="container">
+                <div class="col-md-12 text-center">
+                    <h1 class="text-center">Order Placed Successfully</h1>
+                    <a href="/order" class="btn -btn-primary">View My Orders</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="position: fixed; top: 50px; left: 50%; z-index: 1;">
+        <div id="lottie-animation" style="position: absolute; visibility: hidden;width: 400px; height: 400px;"></div>
+    </div>
+    <div style="position: fixed; top: 50px; left: 30%; z-index: 1;">
+        <div id="lottie-animation2" style="position: absolute; visibility: hidden;width: 400px; height: 400px;"></div>
+    </div>
+    
+    
+</section>
+<script>
+
+
+    function fun (){
+        
+    }
+    let m2 = document.querySelector('.shower2')
+    let m1 = document.querySelector('.shower1')
+    let a1 = document.getElementById('lottie-animation')
+    let a2 = document.getElementById('lottie-animation2')
+    window.onload = ()=>{
+
+        
+       setTimeout(() => {
+            m1.classList.toggle('visible')
+        }, 800)
+       setTimeout(() => {
+            m2.classList.toggle('visible')
+           
+        }, 1400)
+        setTimeout(() => {
+             a1.style.visibility = "visible"
+            lottie.loadAnimation({
+                container: document.getElementById('lottie-animation'), // the DOM element that will contain the animation
+                renderer: 'svg', // the renderer (can also be 'canvas' or 'html')
+                loop: false, // whether the animation should loop
+                autoplay: true, // whether the animation should start automatically
+                path: "/images/anim/anime2.json" // the path to the animation JSON file
+            });
+            a2.style.visibility = "visible"
+            lottie.loadAnimation({
+                container: document.getElementById('lottie-animation2'), // the DOM element that will contain the animation
+                renderer: 'svg', // the renderer (can also be 'canvas' or 'html')
+                loop: false, // whether the animation should loop
+                autoplay: true, // whether the animation should start automatically
+                path: "/images/anim/anime2.json" // the path to the animation JSON file
+            });
+            
+            
+        }, 2000)
+    }
+        
+</script>

@@ -1,0 +1,53 @@
+<section class="section-padding remove-all">
+    <div class="container mt-5 mb-8" style="    margin-bottom: 5rem;">
+        <div class="card mb-3 shadow-hover" style="height: 80%;width: 95%;max-width: 1000px; background-color: #f9f9f9;">
+            <div class="row no-gutters">
+                {{#if details}}
+                    <div class="col-md-2">
+                        <img style="padding: 10px;" src="/product-images/{{details._id}}.jpg" class="card-img" alt="Product Image">
+                    </div>
+                    <div class="col-md-15">
+                        <div class="card-body">
+                            <h5 class="card-title">{{details.name}}</h5>
+                            <h6>Category "{{details.category}}"</h6>
+                            <h6>Description</h6>
+                            <p class="card-text">{{details.description}}</p>
+                            <p class="card-text"><strong>Price:</strong> {{details.price}}</p>
+                            <button style=" width: 1fr; height: 40px;" onclick="addToCart('{{details._id}}')" class="btn btn-primary">Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                {{else}}
+                   <div style="padding: 20px;">
+                    No Products were found
+                   </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="the-container "style="margin-top: 5rem;">
+        <h3 class="text-center mb-5 mt-2">Others in this Selection</h3>
+        <div class="row mt-9 the-row" style="width: 100%;" id="parentofothers">
+            {{#each products}}
+            <div class="  hover card01">
+                <div class="card card02" style="width: 15rem;height: 30rem;">
+                    <a href="/product/{{this._id}}/{{this.category}}"><img class="card-img-top" style="height: 17rem;"
+                            src="/product-images/{{this._id}}.jpg" alt="Card image cap">
+                    </a>
+                    <div class="card-body card03"
+                        style="display: flex;justify-content: center; align-items: center; flex-direction: column;">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <h6 class="card-title">Rs: {{this.price}}/~</h6>
+                        <button style=" width: 1fr; height: 40px;" onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add
+                            to Cart</button>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    
+</section>
+
+

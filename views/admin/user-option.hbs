@@ -1,0 +1,107 @@
+<style>
+.users-list{
+    width: 55%;
+    
+    background-color: rgb(237, 237, 237);
+    margin: 50px;
+    padding: 20px 0 20px 0;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1)
+
+}
+.users{
+    padding: 20px 0 20px 20px;
+    border: 2px  rgb(136, 136, 136);
+    border-style: solid;
+    margin: 0 20px 20px 20px;
+    border-radius: 10px;
+    
+}   .heading{
+    display: block;
+    margin: 0 30px;
+    text-align: center;
+    width: 50%;
+}
+
+.users label{
+    display: block;
+    font-size: 18px;
+}
+.search-bar{
+    display: block;
+    color: red;
+}.search-input{
+    padding: 0 20px;
+    background-color: rgb(237, 237, 237);
+    margin: 0 20px 20px;
+    width: 60%;
+    border-radius: 8px;
+    border: 2px  rgb(136, 136, 136) solid;
+}.search-input:focus{
+    background-color: rgb(213, 231, 255);
+}
+</style>
+<section>
+    <div class="conatiner">
+        <div class="row m-4">
+            <div class="heading">
+                <h2>Users list</h2>
+                
+            </div>
+            <div class="search-bar">
+                
+            </div>
+            <div class="users-list shadow-hover" >
+                <input onkeyup="searchusers()" type="text" class="search-input form-control" id="search-input" placeholder="Search for users">
+                {{#each allUsers}}
+                <div class="users shadow-hover">
+                    <label class="user-name" for="">Name : <span>{{this.name}}</span></label>
+                    <label for="">Email : {{this.email}}</label>
+                    <label class="rolechecker" for="" style="">Role : <span>{{this.role}}</span></label>
+                </div>
+                {{/each}}
+                
+            </div>
+        
+        </div>
+    </div>
+</section>
+
+<script>
+    const listForUser =  document.querySelector('.users-list');
+    const input = document.getElementById("search-input");
+    let role = document.querySelectorAll('.rolechecker')
+    role.forEach((value)=>{
+        if(value.childNodes[1].textContent==="admin"){
+            value.parentElement.style.borderColor="red"
+            value.childNodes[1].style = "color:red;"
+
+
+        }
+    })
+    let userIn = listForUser.getElementsByClassName('users')
+    function searchusers(){
+        
+        let filter = input.value.toUpperCase();
+        let name
+        
+        for(i=0;i<(userIn.length);i++){
+            
+            
+            name = userIn[i].getElementsByTagName("span")[0];
+            
+            if(name){
+                let trText = name.textContent || name.innerHTML;
+                
+                
+                //console.log(trText.toUpperCase().indexOf(filter))
+                if(trText.toUpperCase().indexOf(filter) > -1){
+                    userIn[i].style.display=""
+                }else{
+                    userIn[i].style.display = "none"
+                }
+            }
+
+        }
+    }
+</script>

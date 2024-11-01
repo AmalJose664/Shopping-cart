@@ -1,0 +1,58 @@
+<section >
+    <div id="warining-for-mobiles" style="display: none;">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Warning</strong> This site is not optimised for mobile devices , To resolve this follow <a
+                onclick="openPopup('Make screen optimised',`
+                </p><ul>
+        <li>Click on the three Dots on top right</li>
+        <li>Enable 'Desktop site' option</li>
+    </ul><p>
+                `,'red')" href="#" style="text-decoration: underline;">these instructions</a>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <div class="the-container" style="">
+        <div class="row the-row">
+            {{#if products}}
+            {{#each products}} 
+            
+            <div class="  hover card01">
+                <div class="card card02" style="width: 15rem;height: 30rem;">
+                    <a href="/product/{{this._id}}/{{this.category}}"><img class="card-img-top" style="height: 17rem;"
+                            src="/product-images/{{this._id}}.jpg" alt="Card image cap">
+                    </a>
+                    <div class="card-body card03"
+                        style="display: flex;justify-content: center; align-items: center; flex-direction: column;">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <h6 class="card-title">Rs: {{this.price}}/~</h6>
+                        <button style=" width: 1fr; height: 40px;" onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add
+                            to Cart</button>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            we guess the shopping cart's empty!!!!!!!!!!
+            {{/if}}
+
+        </div>
+    </div>
+    
+</section>
+<script>
+    function detectDevice() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            
+            if (/android|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(userAgent)) {
+                document.getElementById('warining-for-mobiles').style.display = "block"
+                // You can add code here for mobile-specific behavior
+            } else {
+                
+            }
+        }
+        detectDevice()
+</script>
+

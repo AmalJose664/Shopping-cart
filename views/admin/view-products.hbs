@@ -1,0 +1,57 @@
+<section>
+    <div class="container">
+        <h4 class="text-center">All Items</h4>
+        <div class="row mt-4">
+            <a href="/admin/add-products" class="btn btn-success ml-auto">Add Products</a>
+        </div>
+        <table class="table mt-5 " id="table345">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Image</th>
+                    <th scope="col" style="width: 200px;">   Options</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {{#each products}}
+                <tr class="hover-row">
+                    <th scope="row">{{@index}}</th>
+                    <td class="">{{this.name}}</td>
+                    <td>{{this.category}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.description}}</td>
+                    <td><img style="width: 100px; height: 100px; border-radius: 5%" src="/product-images/{{this._id}}.jpg" alt=""></td>
+                    <td><a href="/admin/edit-products/{{this._id}}" class="btn btn-primary mt-4">Edit</a>
+                    <button class="btn btn-danger mt-4" onclick="deleteProduct('{{this._id}}','{{this.name}}')">Delete</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+   
+    async function deleteProduct(id,name){
+        //console.log(id)
+        await customConfirm("Are you sure to remove '" + name + "' from list of products //(warning this action should be only performed by admins)").then((result) => {
+            if (result) {
+                $.ajax({
+                    url: '/admin/delete-products/' + id,
+                    method: 'get',
+                    success: (response) => {
+                        //console.log(response)
+                        location.href = "/admin"
+                    }
+                })
+            }
+        })
+        
+        
+    }
+</script>

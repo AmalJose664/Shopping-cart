@@ -1,0 +1,48 @@
+<section>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-nd-6 ml-5">
+                <h2 class="text-center">Edit Products</h2>
+                {{#if product}}
+                <form action="/admin/edit-products/{{product._id}}" enctype="multipart/form-data" method="post">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" class="form-control" required value="{{product.name}}">
+                
+                    <label for="category">Category</label>
+                    <select name="category" class="form-control">
+                        <option value="Mobile">{{product.category}}</option>
+                        <option value="Laptop">Laptop</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Toys">Toys</option>
+                    </select>
+                
+                    <label for="price">Price</label>
+                    <input type="number" name="price" class="form-control" required value="{{product.price}}">
+                
+                    <label for="description">Description</label>
+                    <input type="text" name="description" class="form-control" required value="{{product.description}}">
+                
+                
+                    <div class="image-box p-1 mt-2 mb-2"
+                        style="display:flex;justify-content: center; align-items: center; width:400px; background-color: #d2d2d2; border-radius: 10px;">
+                        <label for="image" style="padding-left: 10px;">Image</label>
+                        <img id="imgview" src="/product-images/{{product._id}}.jpg" alt=""
+                            style="margin-bottom: 20px; margin-top: 20px; width: 100px; height: auto; border-radius: 5px; background-color: #d2d2d2;">
+                
+                    </div>
+                    <input type="file" name="image" class="form-control" onchange="viewChange(event)">
+                    <br>
+                    <input type="submit" class="btn btn-success mt-3"></input>
+                </form>
+                {{else}}
+                <p>No product were found with the id</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function viewChange(event){
+        document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0])
+    }
+</script>

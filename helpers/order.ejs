@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+
+            color: #333;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            place-content: center;
+            padding: 30px;
+
+        }
+
+        .container {
+            background-color: rgb(234, 234, 234);
+            padding-bottom: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 650px;
+            margin: 20px auto;
+        }
+
+        .nav {
+
+            height: 70px;
+            background: linear-gradient(to right, #030303, #0059ff);
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            padding-top: 18px;
+            align-items: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+
+        }
+
+        .box {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 40px;
+            padding-top: 30px;
+            min-height: 300px;
+
+
+
+            line-height: 25px;
+        }
+
+        .start {
+            width: 1fr
+        }
+
+        .end {
+            width: 1fr
+        }
+
+        .center {
+            width: 43%;
+            font-size: 35px;
+            font-weight: 600;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 0 12px #7e7e7e;
+        }
+
+        footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        footer a {
+            text-decoration: none;
+        }
+
+        .pads {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .pad {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .details {
+            margin: 0 40px 0 40px;
+        }
+
+       
+        .hr,
+        .hr2 {
+            width: 100%;
+            height: 2px;
+            margin: 30px 0 30px 0;
+            background: linear-gradient(to right, #030303, #0059ff);
+        }
+
+        .hr2 {
+            background: linear-gradient(to left, #030303, #0059ff);
+        }
+
+        .products {
+           margin-left: 70px;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: rgb(255, 255, 255);
+            margin: 0 40px 0 40px;
+        }.list {
+            margin-left: 20px;
+        }.green{
+            width: 100%;
+            height: 2px;
+            margin: 30px 0 30px 0;
+            background-color:  #0279f8;
+        }
+
+        
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="nav">
+
+            <div class="start">
+                <img src="cid:<%= completeData.attachments[0].cid %>" alt=" BE Consistent"
+                    style="margin-left: 15px; margin-right: 20px; width: 50px; height: auto; border-radius: 20px;">
+            </div>
+            <div class="center">
+                Shopping Cart
+            </div>
+            <div class="end">
+
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-in">
+                <h2 class="pad">Order Success</h2>
+                <h4 class="pads">Hello <%= completeData.name %>,</h4>
+                <p>
+                    Thank you for your recent purchase! We are excited to confirm that your order has been successfully
+                    placed.
+                </p><br>
+                <P>Below, you'll find the details of your order: </P>
+                <div class="hr"></div>
+                <div class="details">
+                    <h3 style="color: #0279f8;">Order Summary</h3>
+                    <p>Name:<%= completeData.name %></p>
+                    <p>Mobile:<%= completeData.mobile %></p>
+                    <h4  style="color: #0279f8;">Delivery details</h4>
+                    <p>Addresss:<%= completeData.address %></p>
+                    <p>PIN:<%= completeData.pincode %></p>
+                    <p>Payment Method:<%= completeData.method %></p>
+                    <p>Number of items:<%= completeData.numberOfItems %></p>
+                </div><br>
+
+                <div class="products">
+                    <h4 >Products Ordered</h4>
+
+
+                    <% completeData.items.forEach((element,i) => { %>
+                        
+                        <div class="green"></div>
+                        <div class="list">
+                        
+                            <p>Product name: <%= element.product.name %></p>
+                            <p>Category: <%= element.product.category %></p>
+                            <p>Price: Rs <%= element.product.price %></p>
+                            <p>Quantity: <%= element.quantity %></p>
+                            <img style="margin-left: 50px;margin-top:25px ;height:70px; width: auto; border-radius: 8px;"
+                                src="cid:<%= completeData.attachments[i+1].cid %>" alt="image">
+                        
+                        </div>
+                    <% });%>
+                    
+                    <% if(completeData.method === "COD"){ %>
+                        <p style="margin: 15px 0, 15px 0; ">Total Amount to be Paid :Rs <%= completeData.totalPrice %>
+                        </p>
+                    <% }else{ %>
+                        <p style="margin: 15px 0, 15px 0;">Total Amount Paid :Rs <%= completeData.totalPrice %>
+                        </p>
+                    <% } %>
+                </div>
+                <div class="hr2"></div>
+                <p>Your order has been successfully placed. We appreciate your
+                    trust in us and are committed to delivering a great shopping experience. If you have any questions
+                    or need assistance,
+                    please don't hesitate to contact our support team.</p><br>
+                <p>Thank you again for choosing us, and we hope to serve you again soon!</p>
+
+                <p class="pads">
+                    Happy exploring!
+                </p><br>
+                <p>
+                    Best regards,<br>
+                    The Shopping cart Team
+                </p>
+            </div>
+
+        </div>
+        <footer>
+
+            <p>
+                &copy; 2024 Shopping Cart. All rights reserved.<br>
+                Visit our website: <a style="text-decoration: underline;" href="http://localhost:3000">Shopping Cart</a>
+            </p>
+        </footer>
+    </div>
+
+</body>
+
+</html>
