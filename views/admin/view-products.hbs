@@ -44,9 +44,14 @@
                 $.ajax({
                     url: '/admin/delete-products/' + id,
                     method: 'get',
-                    success: (response) => {
-                        //console.log(response)
-                        location.href = "/admin"
+                    success: async (response) => {
+                        if(response.status){
+                            location.href = "/admin"
+                        }else{
+                            await openPopup("ERROR", "Some error Ocuured", "red",)
+                        }
+                        console.log(response)
+                        //location.href = "/admin"
                     }
                 })
             }

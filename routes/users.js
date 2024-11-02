@@ -3,6 +3,8 @@ const productHelpers = require("../helpers/admin-helpers")
 const userHelpers = require("../helpers/user-helpers");
 const emailHelpers = require("../helpers/email-helper");
 const { route } = require('./admin');
+const adminHelpers = require('../helpers/admin-helpers');
+var cloudinary = require('../helpers/cloudinary')
 var router = express.Router();
 
 
@@ -291,6 +293,10 @@ router.post('/subscribe',(req,res)=>{
     userHelpers.subscribe(req.body.email,res)
 })
 
+router.get('/test', (req, res) => {
+
+    
+})
 
 
 module.exports = router;

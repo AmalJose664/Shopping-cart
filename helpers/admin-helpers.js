@@ -2,6 +2,7 @@ var db=require("../config/connection")
 var collection=require('../config/collections')
 //var {ObjectId: toObjectId} = require('mongodb')
 const mongoose = require('mongoose');
+const { ObjectId } = require("bson");
 
 function toObjectId(id) {
     return new mongoose.Types.ObjectId(id);
@@ -45,19 +46,37 @@ module.exports={
             }
         })
     },
-    updateProduct:(porDetails,proId)=>{
+    updateProduct:(proDetails,proId,c)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:toObjectId(proId)},{
-                $set:{
-                    name:porDetails.name,
-                    category: porDetails.category,
-                    price: porDetails.price,
-                    description: porDetails.description,
+            if(c===false){
+                db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: toObjectId(proId) }, {
+                    $set: {
+                        name: proDetails.name,
+                        category: proDetails.category,
+                        price: proDetails.price,
+                        description: proDetails.description,
 
-                }
-            }).then((response)=>{
-                resolve()
-            })
+                    }
+                }).then((response) => {
+                    resolve()
+                })
+            }else if(c===true){
+                db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: toObjectId(proId) }, {
+                    $set: {
+                        name: proDetails.name,
+                        category: proDetails.category,
+                        price: proDetails.price,
+                        description: proDetails.description,
+                        secureUrl: proDetails.secureUrl,
+                        publicId: proDetails.publicId,
+                        uploadDate: proDetails.uploadDate
+
+                    }
+                }).then((response) => {
+                    resolve()
+                })
+            }
+            
         })
     },
     getAllUsers:()=>{
@@ -159,6 +178,14 @@ module.exports={
         
         
         
+    },
+    findProduct : async(id)=>{
+        return new Promise(async(resolve,reject)=>{
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne(toObjectId(id))
+            //console.log("New fiountion findOne ",product);
+            resolve(product)
+            
+        })
     }
 
 }
