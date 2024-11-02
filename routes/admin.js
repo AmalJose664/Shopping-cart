@@ -44,51 +44,15 @@ router.post('/add-products', upload.single('image'),async (req,res)=>{
     
     console.log("printing");
     let image = req.file
-    let exten = image.originalname.split('.').pop().toLowerCase();
-
-
-    if (image.size < 5300000 && (exten === "jpg" || exten === "png" || exten === "jpeg")) {
-        try {
-            imageName = image.originalname
-            const resultOfUpload = await cloudinary.uploader.upload_stream({ resource_type: 'image' }, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    console.log("Cloundinary error ",err.message);
-                    
-                    return res.status(500).json({
-                        success: false,
-                        message: err.message
-                    })
-                }
-                //console.log("Image uploaded Succesfully",result);
-                req.body['secureUrl'] = result.secure_url
-                req.body['publicId'] = result.public_id
-                req.body['uploadDate'] = result.created_at
-                console.log(req.body);
-                //return res.send(`<code>Image uploaded Succesfully</code><br><h3>View them below</h3><br><a href="/images">View</a>`)
-
-                adminHelpers.addProduct(req.body, (id) => {
-                    console.log("callback");
-                    let user = req.session.user
-                    adminHelpers.getAllProducts().then((products) => {
-                        //console.log(products)
-                        //res.render('admin/view-products', { products, user })
-                    })
-                })
-
-            })
-            resultOfUpload.end(image.buffer);
-        } catch (e) {
-            console.log("",e.message);
-            res.json(e.message);
-        }
-    } else {
-        console.log("file size problem");
-        
-        return res.send("<h1 style='color:red;font-family: sans-serif;'>File upload  was not a Success because file size exceeded or file type was not supported :(</h1>")
+    if(image ){
+        await adminHelpers.imageUpload(req, res,image)
+    }else if(req.body.url){
+        await adminHelpers.imageUpload(req, res, req.body.url)
     }
-    
-    
+    else{
+        res.json({message:"No image recieved"})
+    }
+ 
 })
 
 
@@ -99,13 +63,8 @@ router.get('/delete-products/:id', verifyALogin,async function(req,res){
     adminHelpers.findProduct(req.params.id).then( async (product)=>{
 
         try {
-            const result = await cloudinary.uploader.destroy(product.publicId,{invalidate:true}) 
-            if(result.result !== "ok"){
-                console.log("cannot found product or some error occured");
-                
-                return res.status(500).json({ message: "Failed to delete existing image" ,status:false});
-            }
-            console.log("Image deleted successfully from Cloudinary" ,result);
+            await adminHelpers.imageDelete(res, product.publicId) 
+            
             adminHelpers.deleteProduct(proId).then((response) => {
                 res.json({ message: "Failed to delete existing image", status: true })
                 console.log(response);
@@ -127,18 +86,16 @@ router.get('/edit-products/:id', verifyALogin,async (req,res)=>{
     res.render('admin/edit-products',{product,user})
 })
 
+
+
 router.post('/edit-products/:id', upload.single('image') ,async (req,res)=>{
     let image = req.file
     //console.log(req.body, req.params.id)
     adminHelpers.findProduct(req.params.id).then(async(product)=>{
         if(image){
             try {
-                const result = await cloudinary.uploader.destroy(product.publicId, { invalidate: true })
-                if (result.result !== "ok") {
-                    return res.status(500).json({ error: "Failed to delete existing image" });
-                }
-                console.log("Image deleted successfully from Cloudinary");
-
+                await adminHelpers.imageDelete(res, product.publicId)
+                
                 let exten = image.originalname.split('.').pop().toLowerCase();
 
                 if (image.size >= 5300000 || !["jpg", "png", "jpeg"].includes(exten)) {
@@ -173,6 +130,7 @@ router.post('/edit-products/:id', upload.single('image') ,async (req,res)=>{
                     })
                     resultOfUpload.end(image.buffer);
                     console.log("finished function ");
+                    res.redirect('/admin')
                     
                 } catch (e) {
                     console.log("", e.message);
@@ -184,8 +142,52 @@ router.post('/edit-products/:id', upload.single('image') ,async (req,res)=>{
                 console.log("This result catch", error);
                 res.json(error.m)
             }
-        }else{
-            req.body
+        }else if (req.body.url !== ""){
+            let url = req.body.url
+            try {
+                await adminHelpers.imageDelete(res, product.publicId)
+                
+                try {
+                    const resultOfUpload = await cloudinary.uploader.upload(url, (err, result) => {
+                        if (err) {
+                            console.log(err);
+                            console.log("Cloundinary error ", err.message);
+
+                            return res.status(500).json({
+                                success: false,
+                                message: err.message
+                            })
+                        }
+                        //console.log("Image uploaded Succesfully",result);
+                        req.body['secureUrl'] = result.secure_url
+                        req.body['publicId'] = result.public_id
+                        req.body['uploadDate'] = result.created_at
+                        console.log(req.body);
+                        adminHelpers.updateProduct(req.body, req.params.id, true).then(() => {
+                            try {
+                                //console.log('Images======>>>>>',req.files);
+                                res.redirect('/admin');
+
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        })
+                    })
+                    console.log("finished function image replace by link");
+
+                } catch (e) {
+                    console.log("", e.message);
+                    res.json(e.message);
+                }
+
+
+            } catch (error) {
+                console.log("This result catch", error);
+                res.json(error.m)
+            }
+        }
+        else{
+            console.log(req.body);
             adminHelpers.updateProduct(req.body, req.params.id,false).then(() => {
                 try {
                     console.log("data changed");

@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-nd-6 ml-5">
                 <h2 class="text-center">Add Products</h2>
-                <form action="/admin/add-products" enctype="multipart/form-data" method="post">
+                <form enctype="multipart/form-data" method="post" action="/admin/add-products" class="form">
                     <label for="name">Name</label>
                     <input type="text" name="name" class="form-control" required>
                     
@@ -22,7 +22,11 @@
                     <input type="text" name="description" class="form-control" required>
 
                     <label for="image">Image</label>
-                    <input type="file" name="image" class="form-control" required>
+                    <input type="file" name="image" class="form-control" >
+                    or <br>
+
+                    <label for="url">Image url</label>
+                    <input type="text" name="url" class="form-control" >
 
                     <input type="submit" class="btn btn-success mt-3"></input>
                 </form>
@@ -30,3 +34,22 @@
         </div>
     </div>
 </section>
+<script>
+    
+        let form = document.querySelector('.form')
+        let image =  document.getElementsByName('image')[0]
+        let url = document.getElementsByName('url')[0]
+        
+        form.addEventListener('submit', async (event) => {
+            
+            if(image.files.length!== 0 && url.value !== "" ){
+                event.preventDefault()
+                await openPopup("Image and url not supported", "Please provide a image or a url link but not both", "blue")
+            }else if(image.files.length == 0 && url.value === ""){
+                event.preventDefault()
+                await openPopup("Null image or url","Please provide a image file or url of image","blue")
+            }
+            console.log({image},image.files.length)
+            
+        })
+</script>

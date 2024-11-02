@@ -3,6 +3,7 @@ var collection=require('../config/collections')
 //var {ObjectId: toObjectId} = require('mongodb')
 const mongoose = require('mongoose');
 const { ObjectId } = require("bson");
+var cloudinary = require('../helpers/cloudinary')
 
 function toObjectId(id) {
     return new mongoose.Types.ObjectId(id);
@@ -186,6 +187,102 @@ module.exports={
             resolve(product)
             
         })
+    },
+
+    imageUpload:async (req,res,image)=>{
+        console.log(typeof image);
+        let exten
+        if(typeof image !== "string"){
+            exten = image.originalname.split('.').pop().toLowerCase();
+            if (image.size >= 5300000 || !["jpg", "png", "jpeg"].includes(exten)) {
+                console.log("file size problem");
+
+                return res.send("<h1 style='color:red;font-family: sans-serif;'>File upload  was not a Success because file size exceeded or file type was not supported :(</h1>")
+            }
+            try {
+                const resultOfUpload = await cloudinary.uploader.upload_stream({ resource_type: 'image' }, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        console.log("Cloundinary error ", err.message);
+
+                        return res.status(500).json({
+                            success: false,
+                            message: err.message
+                        })
+                    }
+                    //console.log("Image uploaded Succesfully",result);
+                    req.body['secureUrl'] = result.secure_url
+                    req.body['publicId'] = result.public_id
+                    req.body['uploadDate'] = result.created_at
+                    console.log(req.body);
+                    //return res.send(`<code>Image uploaded Succesfully</code><br><h3>View them below</h3><br><a href="/images">View</a>`)
+
+                    require('./admin-helpers').addProduct(req.body, (id) => {
+                        console.log("callback");
+                        let user = req.session.user
+                        require('./admin-helpers').getAllProducts().then((products) => {
+                            //console.log(products)
+                            console.log("function finished");
+
+                            //res.render('admin/view-products', { products, user })
+                        })
+                    })
+
+                })
+                resultOfUpload.end(image.buffer);
+            } catch (e) {
+                console.log("", e.message);
+                res.json(e.message);
+            }
+        } else if (typeof image === "string"){
+            console.log("enter link part ");
+            try {
+                cloudinary.uploader.upload(image, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                        res.send(`<h5 style="color:#005cdc;font-size:30px ;font-family:sans-serif">${err.message}</h5>`);
+                        return
+    
+                    }
+                    //console.log(result);
+                    req.body['secureUrl'] = result.secure_url
+                    req.body['publicId'] = result.public_id
+                    req.body['uploadDate'] = result.created_at
+                    console.log(req.body);
+                    //return res.send(`<code>Image uploaded Succesfully</code><br><h3>View them below</h3><br><a href="/images">View</a>`)
+    
+                    require('./admin-helpers').addProduct(req.body, (id) => {
+                        console.log("callback");
+                        let user = req.session.user
+                        require('./admin-helpers').getAllProducts().then((products) => {
+                            //console.log(products)
+                            console.log("function finished");
+    
+                            //res.render('admin/view-products', { products, user })
+                        })
+                    })
+                    console.log(result.original_filename,);
+                    console.log("Upload via link succes");
+                    
+    
+                })
+            } catch (error) {
+                res.json(e.message)
+            }
+        }else{
+            return res.json({message:"nothing was performed or done"})
+        }
+
+
+    },
+
+
+    imageDelete: async (res, publicId)=>{
+        const result = await cloudinary.uploader.destroy(publicId, { invalidate: true })
+        if (result.result !== "ok") {
+            return res.status(500).json({ error: "Failed to delete existing image" });
+        }
+        console.log("Image deleted successfully from Cloudinary")
     }
 
 }

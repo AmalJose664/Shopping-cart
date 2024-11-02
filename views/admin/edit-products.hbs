@@ -4,7 +4,7 @@
             <div class="col-nd-6 ml-5">
                 <h2 class="text-center">Edit Products</h2>
                 {{#if product}}
-                <form action="/admin/edit-products/{{product._id}}" enctype="multipart/form-data" method="post">
+                <form class="form" action="/admin/edit-products/{{product._id}}" enctype="multipart/form-data" method="post">
                     <label for="name">Name</label>
                     <input type="text" name="name" class="form-control" required value="{{product.name}}">
                 
@@ -32,6 +32,10 @@
                     </div>
                     <input type="file" name="image" class="form-control" onchange="viewChange(event)">
                     <br>
+                    or <br>
+                    
+                    <label for="url">Image url</label>
+                    <input type="text" name="url" class="form-control">
                     <input type="submit" class="btn btn-success mt-3"></input>
                 </form>
                 {{else}}
@@ -45,4 +49,17 @@
     function viewChange(event){
         document.getElementById('imgview').src=URL.createObjectURL(event.target.files[0])
     }
+    let form = document.querySelector('.form')
+        let image = document.getElementsByName('image')[0]
+        let url = document.getElementsByName('url')[0]
+
+        form.addEventListener('submit', async (event) => {
+
+            if (image.files.length !== 0 && url.value !== "") {
+                event.preventDefault()
+                await openPopup("Image and url not supported", "Please provide a image or a url link but not both", "blue")
+            }
+            console.log({ image }, image.files.length)
+
+        })
 </script>
