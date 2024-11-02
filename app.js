@@ -30,6 +30,7 @@ app.use(session({ resave: true, saveUninitialized: true,secret:"Key",cookie:{max
 
 
 
+
 //use this code to access database locally
 
 // dbs.connect((err)=>{
