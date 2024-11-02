@@ -25,7 +25,7 @@
                     <td>{{this.category}}</td>
                     <td>{{this.price}}</td>
                     <td>{{this.description}}</td>
-                    <td><img style="width: 100px; height: 100px; border-radius: 5%" src="/product-images/{{this._id}}.jpg" alt=""></td>
+                    <td><img style="width: 100px; height: 100px; border-radius: 5%" src="{{this.secureUrl}}" alt=""></td>
                     <td><a href="/admin/edit-products/{{this._id}}" class="btn btn-primary mt-4">Edit</a>
                     <button class="btn btn-danger mt-4" onclick="deleteProduct('{{this._id}}','{{this.name}}')">Delete</button></td>
                 </tr>

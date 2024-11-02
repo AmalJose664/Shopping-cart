@@ -3,6 +3,8 @@ var adminHelpers = require("../helpers/admin-helpers")
 var router = express.Router();
 var fs = require('fs');
 const userHelpers = require('../helpers/user-helpers');
+const upload = require('../helpers/multer');
+var cloudinary = require('../helpers/cloudinary')
 
 
 const verifyALogin = (req, res, next) => {
@@ -35,29 +37,59 @@ router.get('/add-products',verifyALogin,function(req,res){
     res.render('admin/add-products', {  user })
 })
 
-router.post('/add-products',(req,res)=>{
-    //console.log(req.body)
-    //console.log(req.files.image)
+//files are uploaded  here
+router.post('/add-products', upload.single('image'),async (req,res)=>{
+    console.log(req.body)
+    console.log(req.file)
     
     
     console.log("printing");
-    
-    adminHelpers.addProduct(req.body,(id)=>{
-        console.log("callback");
-      let user = req.session.user
-      let image=req.files.image
-      
-      image.mv("./public/product-images/"+id+".jpg",(err)=>{
-        if(!err){
-          adminHelpers.getAllProducts().then((products) => {
-            //console.log(products)
-            res.render('admin/view-products', { products, user})
-          })
-        }else{
-          console.log(err)
+    let image = req.file
+    let exten = image.originalname.split('.').pop().toLowerCase();
+
+
+    if (image.size < 5300000 && (exten === "jpg" || exten === "png" || exten === "jpeg")) {
+        try {
+            imageName = image.originalname
+            const resultOfUpload = await cloudinary.uploader.upload_stream({ resource_type: 'image' }, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    console.log("Cloundinary error ",err.message);
+                    
+                    return res.status(500).json({
+                        success: false,
+                        message: err.message
+                    })
+                }
+                //console.log("Image uploaded Succesfully",result);
+                req.body['secureUrl'] = result.secure_url
+                req.body['publicId'] = result.public_id
+                req.body['uploadDate'] = result.created_at
+                console.log(req.body);
+                //return res.send(`<code>Image uploaded Succesfully</code><br><h3>View them below</h3><br><a href="/images">View</a>`)
+
+                adminHelpers.addProduct(req.body, (id) => {
+                    console.log("callback");
+                    let user = req.session.user
+                    adminHelpers.getAllProducts().then((products) => {
+                        console.log(products)
+                        //res.render('admin/view-products', { products, user })
+                    })
+                })
+
+            })
+            resultOfUpload.end(image.buffer);
+        } catch (e) {
+            console.log("",e.message);
+            res.json(e.message);
         }
-      })
-    })
+    } else {
+        console.log("file size problem");
+        
+        return res.send("<h1 style='color:red;font-family: sans-serif;'>File upload  was not a Success because file size exceeded or file type was not supported :(</h1>")
+    }
+    
+    
 })
 
 

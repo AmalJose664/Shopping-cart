@@ -485,7 +485,7 @@ module.exports={
 
 
     removeCartItems:(userId)=>{
-        db.get().collection(collection.CART_COLLECTION).removeOne({ user: toObjectId(userId) })
+        db.get().collection(collection.CART_COLLECTION).deleteOne({ user: toObjectId(userId) })
     },
 
 

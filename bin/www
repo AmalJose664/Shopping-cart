@@ -9,6 +9,9 @@ var debug = require('debug')('node1:server');
 var http = require('http');
 const mongoose = require('mongoose');
 const dbFile = require('../config/connection');
+var dotenv = require('dotenv')
+dotenv.config()
+
 /**
  * Get port from environment and store in Express.
  */
@@ -23,8 +26,6 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-var dotenv = require('dotenv')
-dotenv.config()
 
 /**
  * Listen on provided port, on all network interfaces.
