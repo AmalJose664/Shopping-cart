@@ -20,13 +20,6 @@ module.exports={
             items: usersProducts
         }
 
-        // attachments: [
-        //     {
-                // filename: 'image.jpg',   // File name you want the image to have
-                // path: __dirname + '/../public/images/ico.jpg', // Absolute path to the image on your server
-                // cid: 'unique@image.cid' // Same cid value as in the html img src
-        //     },
-        // ],
         let attachments = [
             {
                 filename: 'logo.jpg',   
@@ -34,16 +27,16 @@ module.exports={
                 cid: 'unique@logo.cid' 
             },
         ]
-         usersProducts.forEach((element,i) => {
-             attachments.push({
-                filename:"product"+(i+1),
-                path:__dirname + "/../public/product-images/"+element.product._id+".jpg",
-                 cid: 'unique@product'+(i+1)+'.cid'
-            })
+        //  usersProducts.forEach((element,i) => {
+        //      attachments.push({
+        //         filename:"product"+(i+1),
+        //         path:__dirname + "/../public/product-images/"+element.product._id+".jpg",
+        //          cid: 'unique@product'+(i+1)+'.cid'
+        //     })
             
-        });
+        // });
         completeData.attachments=attachments;
-        //console.log("print whole===>>>",completeData);
+        //console.log("Complte data whole===>>>",completeData.items[0].product);
 
         let htmlContent = await ejs.renderFile(__dirname + "/order.ejs", { completeData })
         //console.log("Pirnting html",htmlContent);

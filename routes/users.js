@@ -178,15 +178,16 @@ router.post('/place-order',verifyLogin,async(req,res)=>{
             
             
             
-            //console.log("Unneeded CArting");
-            userHelpers.placeOrder(req.body, product, totalPrice).then((orderId) => {
+            console.log("Print if request get or not");
+            await userHelpers.placeOrder(req.body, product, totalPrice).then(async (orderId) => {
                 if (req.body.paymentMethod === 'COD') {
 
                     //console.log("THis got executed");
                     userHelpers.sendEmail(req.session.user,"Product order Success")
                     res.json({ status: true })
                 } else {
-                    userHelpers.generateRazorpay(orderId, totalPrice).then((response) => {
+                    console.log("Reaahced here ", orderId._id, orderId._id.toString())
+                    await userHelpers.generateRazorpay(orderId._id.toString(), totalPrice).then((response) => {
                         
                         //console.log("from generate Razorpay==>>",response.status,response);
                         res.json(response)
@@ -290,11 +291,6 @@ router.post('/subscribe',(req,res)=>{
     userHelpers.subscribe(req.body.email,res)
 })
 
-router.get('/test', async (req, res) => {
-
-    data =await userHelpers.newFuncion()
-    res.json(data);
-})
 
 
 module.exports = router;

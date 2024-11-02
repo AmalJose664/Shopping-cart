@@ -194,7 +194,7 @@
                             <p>Price: Rs <%= element.product.price %></p>
                             <p>Quantity: <%= element.quantity %></p>
                             <img style="margin-left: 50px;margin-top:25px ;height:70px; width: auto; border-radius: 8px;"
-                                src="cid:<%= completeData.attachments[i+1].cid %>" alt="image">
+                                src="<%= element.secureUrl %>" alt="Image not displayed due to security reasons of gmail">
                         
                         </div>
                     <% });%>

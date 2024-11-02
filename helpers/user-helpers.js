@@ -320,8 +320,9 @@ module.exports={
                 status:status
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
-                if (response.insertedCount) {
+                if (response) {
                     // Merge orderObj with the inserted _id
+                    //console.log('Print order id =========>>>>>>>>',{ ...orderObj, _id: response.insertedId },"<<<<<<<<<+================Finished ");
                     resolve({ ...orderObj, _id: response.insertedId }); // Resolves with the full order object including _id
                 } else {
                     resolve(false); // No insertion occurred
@@ -412,7 +413,10 @@ module.exports={
                 currency: "INR",
                 receipt: orderId
             };
+            //console.log(options);
+            
             instance.orders.create(options, function (err, order) {
+                console.log(order);
                 if(err){
                     console.log("ERROR==>>",err);
                 }else{
@@ -603,8 +607,4 @@ module.exports={
         
     },
 
-    newFuncion:async ()=>{
-        data = await db.get2().collection('users').find().toArray();
-        return data;
-    }
 }
