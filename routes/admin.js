@@ -60,7 +60,7 @@ router.get('/delete-products/:id', verifyALogin,async function(req,res){
     console.log("request reccieved");
     
     let proId=req.params.id
-    adminHelpers.findProduct(req.params.id).then( async (product)=>{
+    adminHelpers.findProduct(req.params.id,res).then( async (product)=>{
 
         try {
             await adminHelpers.imageDelete(res, product.publicId) 
@@ -91,7 +91,7 @@ router.get('/edit-products/:id', verifyALogin,async (req,res)=>{
 router.post('/edit-products/:id', upload.single('image') ,async (req,res)=>{
     let image = req.file
     //console.log(req.body, req.params.id)
-    adminHelpers.findProduct(req.params.id).then(async(product)=>{
+    adminHelpers.findProduct(req.params.id,res).then(async(product)=>{
         if(image){
             try {
                 await adminHelpers.imageDelete(res, product.publicId)

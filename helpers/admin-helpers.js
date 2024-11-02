@@ -181,12 +181,16 @@ module.exports={
         
     },
     findProduct : async(id)=>{
-        return new Promise(async(resolve,reject)=>{
-            let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne(toObjectId(id))
-            //console.log("New fiountion findOne ",product);
-            resolve(product)
-            
-        })
+        try {
+            return new Promise(async(resolve,reject)=>{
+                let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne(toObjectId(id))
+                //console.log("New fiountion findOne ",product);
+                resolve(product)
+                
+            })
+        } catch (error) {
+            res.json({message:"NO Product or item found"})
+        }
     },
 
     imageUpload:async (req,res,image)=>{
