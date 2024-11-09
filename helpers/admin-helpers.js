@@ -32,6 +32,7 @@ module.exports={
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({ _id: toObjectId(proId)}).then((response)=>{
                 //console.log(response)
+                db.get().collection(collection.CART_COLLECTION).updateMany({}, { $pull: { products: { item: toObjectId(proId) } } })
                 resolve(response)
             })
         })
@@ -228,7 +229,7 @@ module.exports={
                             //console.log(products)
                             console.log("function finished");
 
-                            //res.render('admin/view-products', { products, user })
+                            res.render('admin/view-products', { products, user })
                         })
                     })
 
@@ -262,7 +263,7 @@ module.exports={
                             //console.log(products)
                             console.log("function finished");
     
-                            //res.render('admin/view-products', { products, user })
+                            res.render('admin/view-products', { products, user })
                         })
                     })
                     console.log(result.original_filename,);
